@@ -10,20 +10,20 @@
 #                                                                              #
 # **************************************************************************** #
 
-NAME		=	get_next_line
+NAME		=	gnl
 CC			=	gcc
-CFLAGS		+=	-Wall -Wextra -Werror -I headers/
+CFLAGS		+=	-Wall -Wextra -Werror -I get_next_line.h
 OFLAGS		=	-c $(CFLAGS)
 
 
 		#  libs & link cmd	#
-LIB_DIR		=	./lib/
+LIB_DIR		=	./libft/
 LIB_LINKS	=	-lft
 LINK_LIBS	=	-L $(LIB_DIR) $(LIB_LINKS)
 
 
 		#	  files/folders		#
-MAIN		=	main.c
+#MAIN		=	main.c
 CFILES		=	get_next_line.c
 
 OFILES		= $(CFILES:.c=.o)
@@ -34,9 +34,7 @@ all: $(NAME)
 
 $(NAME): $(OFILES)
 	$(MAKE) -C ./libft
-	mkdir lib
-	mv ./libft/libft.a ./lib/
-	$(CC) $(CFLAGS) -o $(NAME) $(MAIN) $(OFILES) $(LINK_LIBS)
+	$(CC) $(OFLAGS) $(CFILES) #$(LINK_LIBS)
 
 clean:
 	/bin/rm -rf $(OFILES)

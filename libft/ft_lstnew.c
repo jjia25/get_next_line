@@ -17,24 +17,24 @@ t_list	*ft_lstnew(void const *data, size_t data_size)
 	t_list *fresh;
 
 	fresh = (t_list *)malloc(sizeof(t_list));
-	if (fresh == NULL)
-		return (NULL);
-	if (data == NULL)
+	if (fresh == 0)
+		return (0);
+	if (data == 0)
 	{
-		(fresh->data = NULL);
+		(fresh->data = 0);
 		(fresh->data_size = 0);
 	}
 	else
 	{
-		fresh->data = malloc(data_size);
-		if (fresh->data == NULL)
+		fresh->data = (char)malloc(data_size);
+		if (data == 0)
 		{
 			free(fresh);
-			return (NULL);
+			return (0);
 		}
-		ft_memcpy((fresh->data), data, data_size);
+		ft_memcpy((void *)&fresh->data, data, data_size);
 		fresh->data_size = data_size;
 	}
-	fresh->next = NULL;
+	fresh->next = 0;
 	return (fresh);
 }

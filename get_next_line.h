@@ -1,27 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstdel.c                                        :+:      :+:    :+:   */
+/*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jjia <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/11/08 17:00:11 by jjia              #+#    #+#             */
-/*   Updated: 2016/11/13 23:42:25 by jjia             ###   ########.fr       */
+/*   Created: 2016/12/06 15:36:36 by jjia              #+#    #+#             */
+/*   Updated: 2016/12/06 15:36:43 by jjia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#ifndef _GET_NEXT_LINE_H
 
-void	ft_lstdel(t_list **alst, void (*del)(void *, size_t))
-{
-	t_list *suc;
+# define _GET_NEXT_LINE_H
+#include <stdlib.h>
+#include "./libft/libft.h"
+#include <fcntl.h>
+#define BUFF_SIZE 100
 
-	while (*alst)
-	{
-		suc = (*alst)->next;
-		del((void *)&(*alst)->data, (*alst)->data_size);
-		free(*alst);
-		*alst = suc;
-	}
-	*alst = NULL;
-}
+// typedef struct				s_mult_fd
+// {
+// 	int						fd;
+// 	t_list					*list;
+// 	struct s_mult_fd		*next;
+// }							t_mult_fd;
+
+int							get_next_line(int fd, char **line);
+
+#endif

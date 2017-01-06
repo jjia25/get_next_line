@@ -1,22 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   ft_putlist.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jjia <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/12/06 15:36:36 by jjia              #+#    #+#             */
-/*   Updated: 2016/12/06 15:36:43 by jjia             ###   ########.fr       */
+/*   Created: 2016/12/08 21:34:35 by jjia              #+#    #+#             */
+/*   Updated: 2016/12/08 21:34:37 by jjia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef _GET_NEXT_LINE_H
+#include "libft.h"
 
-# define _GET_NEXT_LINE_H
-#define BUFF_SIZE 32
-#include <stdlib.h>
-# include "libft.h"
+void ft_putlist(t_list *list)
+{
+	t_list *tmp;
 
-int	get_next_line(const int fd, char **line);
-
-#endif
+	tmp = list;
+	while (tmp)
+	{
+		ft_putchar(tmp->data);
+		tmp = tmp->next;
+	}
+}
