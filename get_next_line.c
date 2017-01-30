@@ -6,153 +6,175 @@
 /*   By: jjia <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/06 15:38:42 by jjia              #+#    #+#             */
-/*   Updated: 2016/12/06 15:38:43 by jjia             ###   ########.fr       */
+/*   Updated: 2017/01/19 19:30:53 by jjia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include <stdio.h>
 
-static int	read_list(t_list **list, int *fd, char **buffer)
+static void move_to_front(char *buffer, int b4_nl)
 {
-	int index;
-	int chars_read;
-	char *tmp_buff;
-
-	index = 0;
-	if (!(tmp_buff = (char *)malloc(sizeof(char) * BUFF_SIZE)))
-		return (-1);
-	chars_read = read(*fd, tmp_buff, BUFF_SIZE);
-	if (chars_read < 0)
-		return (-1);
-	*buffer = tmp_buff;
-	while (index < chars_read)
+	char *afternl;
+	char *after_move;
+	afternl = (buffer + b4_nl + 1);
+	char *nl = ft_strchr(buffer, '\n');
+	after_move = buffer + ft_strlen(afternl);
+	// printf("9) Buffer is: %s\n", buffer);
+	//printf("1) b4_nl is: %d\n", b4_nl);
+	//printf("after_nl is: %s\n", afternl);
+	if (nl)
 	{
-		ft_list_push_back(list, buffer[0][index]);
-		index++;
+		ft_memmove(buffer, afternl, ft_strlen(afternl));
+		// printf("after_nl is: %s\n", afternl);
+		ft_bzero(after_move, ft_strlen(after_move));
+		// printf("3) Buffer is: %s\n", buffer);
 	}
-	ft_putstr("List read\n");
-	free (tmp_buff);
-	return (chars_read);
+	// printf("9) Buffer is: %s\n", buffer);
 }
 
-//static int list_new_line(t_mult_fd **mult_fd, int *fd, char **buffer)
-static int list_new_line(t_list **list, int *fd, char **buffer)
-{
-	int count;
-	t_list *tmp;
-	//t_list *tmp_list;
-	int chars_read;
-
-	count = 0;
-	tmp = *list;
-	ft_putstr("Is this working?\n");
-	while (tmp && tmp->data != '\n' && tmp->data != 0)
-	{
-		count++;
-		//ft_putstr("Count is: "); ft_putnbr(count); ft_putchar('\n');
-		tmp = tmp->next;
-	}
-	//ft_putstr("List: "); ft_putlist(*list); ft_putchar('\n');
-	//ft_putstr("List size is: "); ft_putnbr(ft_list_size((*mult_fd)->list)); ft_putchar('\n');
-	while (count == ft_list_size(*list))
-	{
-		if ((chars_read = read_list(list, fd, buffer)) == 0)
-		{
-			ft_putstr("Hello again\n");
-			break ;
-		}
-		tmp = *list;
-		count = 0;
-		while (tmp && tmp->data != '\n' && tmp->data != 0)
-		{
-			count++;
-			//ft_putstr("2) Count is: "); ft_putnbr(count); ft_putchar('\n');
-			tmp = tmp->next;
-		}
-	}
-	ft_putstr("Count is: "); ft_putnbr(count); ft_putchar('\n');
-	return (count);
-}
-
-static void list_to_line(t_mult_fd *mult_fd, int *b4_nl, char **line)
+static void	read_to_nl(char *buffer, char **line, int chars_read)
 {
 	int i;
-	t_list *tmp;
+	int line_len = 0;
 
 	i = 0;
-	ft_putstr("0) List is: "); ft_putlist(mult_fd->list); ft_putchar('\n');
-	while (mult_fd->list && i < *b4_nl && (mult_fd->list)->data != 0)
+	// printf("5) chars_read is: %d\n", chars_read);
+	// printf("5) Buffer is: %s\n", buffer);
+	// printf("b4_nl is: %d\n", b4_nl);
+	// printf("buffer size is: %zu\n", ft_strlen(buffer));
+	
+	if (!*line)
 	{
-		tmp = mult_fd->list;
-		*(*line + i) = (mult_fd->list)->data;
-		i++;
-		mult_fd->list = (mult_fd->list)->next;
-		free(tmp);
-	}
-	ft_putstr("1) List is: "); ft_putlist(mult_fd->list); ft_putchar('\n');
-	if (mult_fd->list && (mult_fd->list)->data == '\n' && (mult_fd->list)->data != 0)
-	{
-		tmp = mult_fd->list;
-		mult_fd->list = (mult_fd->list)->next;
-		free(tmp);
-	}
-	ft_putstr("2) List is: "); ft_putlist(mult_fd->list); ft_putchar('\n');
-}
-
-static void	mult_fd_list(int fd, t_mult_fd *mult_fd, t_list **newlist)
-{
-	//ft_putstr("tmp is: "); ft_putlist(tmp->list); ft_putchar('\n');
-	*newlist = NULL;
-	while (mult_fd)
-	{
-		ft_putstr("Entering loop \n");
-		//ft_putstr("fd is: "); ft_putnbr(fd); ft_putchar('\n');
-		//ft_putstr("tmp->fd is: "); ft_putnbr(tmp->fd); ft_putchar('\n');
-		if (mult_fd->fd == fd)
-		{
-			*newlist = mult_fd->list;
-			ft_putstr("fd is: "); ft_putnbr(fd); ft_putchar('\n');
-			//ft_putstr("tmp is: "); ft_putlist(tmp->list); ft_putchar('\n');
+		// printf("mallocing line\n");
+		if (!(*line = (char *)malloc(sizeof(char) * chars_read + 1)))
 			return ;
-		}
-		//ft_putstr("tmp is: "); ft_putlist(tmp->list); ft_putchar('\n');
-		mult_fd = mult_fd->next;
+		// printf("line malloced chars_read %i\n", chars_read);
+		*(*line + chars_read) = '\0';
 	}
-	ft_putstr("Out of loop\n");
-	//*newlist = NULL;
+	// printf("hello\n");
+
+	// else
+	// {
+		line_len = ft_strlen(*line);
+		ft_realloc((void **)line, line_len, line_len + chars_read + 1);
+		//line_len = ft_strlen(*line);
+		// printf("2) line size is: %zu\n", ft_strlen(*line));
+	// printf("*line + chars_read is: %d\n", *(*line + chars_read));
+		//ft_bzero(*line, ft_strlen(*line));
+		(*line)[line_len + chars_read] = 0;
+	// printf("(*line)[line_len + i] is: %d\n", line_len + i);
+	// }
+	while (i < chars_read)
+	{
+		// printf("*buffer[i] is: %c\n", (buffer)[i]);
+		(*line)[line_len + i] = (buffer)[i];
+		// printf("i is: %d\n", i);
+		// printf("*line[line_len + i] is: %c\n", (*line)[line_len + i]);
+		i++;
+	}
+	// printf("5) Line is: %s\n", *line);
+	move_to_front(buffer, chars_read);
+	// printf("7) Line is: %s\n", *line);
+	// printf("2) Buffer is: %s\n", buffer);
+	//return (1);
 }
 
-int	get_next_line(int fd, char **line)
+static int	string_to_nl(char *buffer, int fd, char **line, int chars_read)
 {
-	t_list *newlist;
-	static t_mult_fd *mult_fd;
-	char *buffer;
-	int b4_nl;
-	int chars_read;
-
-	mult_fd_list(fd, mult_fd, &newlist);
-	//ft_putstr("List is: "); ft_putlist(list); ft_putchar('\n');
-	if (!newlist)
+	// printf("1) Buffer is: %s\n", buffer);=
+	// printf("1) Chars read is: %d\n", chars_read);
+	
+	int		len;
+	char	*nl;
+	int		nllen;
+	// if ((chars_read = read(fd, buffer + ft_strlen(buffer), BUFF_SIZE)) <= 0)
+	// 	return (chars_read);
+	int read_again = chars_read;
+	// printf("1) Chars read is: %d\n", chars_read);
+	// printf("8) Buffer is: %s\n", buffer);
+	nl = ft_strchr(buffer, '\n');
+	// if (!(*line = (char *)malloc(sizeof(char) * chars_read + 1)))
+	// 	return (-1);
+	//*(*line + chars_read) = '\0';
+	// printf("Yes\n");
+	if (!nl && chars_read < BUFF_SIZE)
 	{
-		//ft_putstr("Hello\n");
-		if ((chars_read = read_list(&newlist, &fd, &buffer)) == 0)
-			return (0);
-		if (chars_read < 0)
-			return (-1);
-		//ft_putstr("yes\n");
-		ft_struct_push_back(&mult_fd, &newlist, fd);
-		ft_putstr("Struct is: "); ft_put_struct(mult_fd); ft_putchar('\n');
+		// printf("Returning\n");
+		read_to_nl(buffer, line, chars_read);
+		// printf("yes\n");
+		//return (chars_read);
 	}
-	ft_putstr("Entering b4_nl\n");
-	b4_nl = list_new_line(&newlist, &fd, &buffer);
-	//ft_putstr("b4_nl is: "); ft_putnbr(b4_nl); ft_putchar('\n');
-	if (b4_nl == 0 && !newlist)
-		return (0);
-	//ft_putstr("List is: "); ft_putlist(newlist); ft_putchar('\n');
-	if (!(*line = (char *)malloc(sizeof(char) * (b4_nl + 1))))
+	
+	while (!nl)
+	{
+		// printf("entering\n");
+		// move_to_front(buffer, read_again);
+		read_to_nl(buffer, line, read_again);
+		ft_bzero(buffer, BUFF_SIZE);
+		//move_to_front(buffer, read_again);
+		// printf("buffer + read_again is: %s\n", (buffer + read_again));
+		read_again = read(fd, buffer + ft_strlen(buffer), BUFF_SIZE);
+		// printf("read again is: %d\n", read_again);
+		chars_read = read_again;
+		nl = ft_strchr(buffer, '\n');
+		//ft_putstr("buffer is: "); ft_putendl(buffer);
+		// printf("read_again is: %d\n", read_again);
+	}
+	if (nl == NULL)
+		return (read_again);
+	// printf("6) Buffer is: %s\n", buffer);
+	len = ft_strlen(buffer);
+	// printf("len is: %d\n", len);
+	nllen = len - ft_strlen(nl);
+	//ft_putendl("nllen is: "); ft_putnbr(nllen); ft_putchar('\n');
+	return (nllen);
+}
+
+int get_next_line(int fd, char **line)
+{
+	static char *buffer;
+	int chars_read;
+	int b4_nl = 0;
+	*line = NULL;
+	if (fd <= 0 || !line)
 		return (-1);
-	*(*line + b4_nl) = '\0';
-	list_to_line(mult_fd, &b4_nl, line);
+	if (!buffer)
+	{
+		if (!(buffer = (char *)malloc(sizeof(char) * BUFF_SIZE + 1)))
+			return (-1);
+		// printf("Buffer malloced\n");
+		ft_bzero(buffer, BUFF_SIZE + 1);
+		if ((chars_read = read(fd, buffer, BUFF_SIZE)) <= 0)
+			return (chars_read);
+	}
+	// printf("0) Buffer is: %s\n", buffer);
+	ft_bzero((void *)(buffer + ft_strlen(buffer)), BUFF_SIZE + 1);
+	if ((chars_read = read(fd, buffer + ft_strlen(buffer), BUFF_SIZE)) <= 0)
+	{
+		if (ft_strlen(buffer) > 0)
+		{
+			chars_read = ft_strlen(buffer);
+			// printf("3) chars read is: %d\n", chars_read);
+		}
+		else if (ft_strlen(buffer) <= 0)
+		{
+			// printf("2) chars read is: %d\n", chars_read);
+			return (chars_read);
+		}
+	}
+	// printf("0) chars read is: %d\n", chars_read);
+	// printf("-1) Buffer is: %s\n", buffer);
+	
+	// printf("1) line size is: %zu\n", ft_strlen(*line));
+	if (!(b4_nl = string_to_nl(buffer, fd, line, chars_read)))
+		return (-1);
+	
+		// printf("line malloced chars_read %i\n", chars_read);
+	//*(*line + b4_nl) = '\0';
+	// printf("1) b4_nl is: %d\n", b4_nl);
+	read_to_nl(buffer, line, b4_nl);
+	// printf("6) Line is: %s\n", *line);
 	if (chars_read > 0)
 		return (1);
 	return (0);

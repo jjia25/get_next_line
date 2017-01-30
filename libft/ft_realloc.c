@@ -1,32 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_struct_push_back.c                              :+:      :+:    :+:   */
+/*   ft_realloc.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jjia <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/12/15 18:10:07 by jjia              #+#    #+#             */
-/*   Updated: 2016/12/15 18:10:09 by jjia             ###   ########.fr       */
+/*   Created: 2017/01/12 12:31:04 by jjia              #+#    #+#             */
+/*   Updated: 2017/01/12 12:31:08 by jjia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_struct_push_back(t_mult_fd **begin_struct, t_list **list, int fd)
+void		*ft_realloc(void **ptr, size_t old, size_t new_size)
 {
-	t_mult_fd *temp;
-	t_mult_fd *new_node;
+	void	*new;
 
-	if (!(new_node = ft_create_list(*list, fd)))
-		return ;
-	temp = *begin_struct;
-	if (temp != NULL)
-	{
-		while (temp->next != NULL)
-			temp = temp->next;
-		temp->next = new_node;
-	}
+	if (!ptr && !old)
+		return (NULL);
+	if (new_size == 0)
+		new = (void *)ft_memalloc(sizeof(char));
 	else
-		*begin_struct = new_node;
-	*list = new_node->list;
+	{
+		if (!(new = (void *)malloc(new_size)))
+		return (NULL);
+	}
+	ft_bzero(new, (new_size) ? new_size : sizeof(char));
+	if (new_size == 0)
+		ft_memcpy(new, ptr, sizeof(char));
+	else
+		ft_memcpy(new, ptr, new_size);
+	//free(&ptr);
+	return (new);
 }

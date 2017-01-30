@@ -26,8 +26,7 @@ CFILES = ft_atoi.c  ft_bzero.c ft_isalnum.c ft_isalpha.c \
 		ft_strstr.c ft_strsub.c ft_strtrim.c ft_toupper.c \
 		ft_digit_length.c ft_isspace.c ft_absolutevalue.c ft_count_words.c \
 		ft_power.c ft_strndup.c ft_list_push_back.c \
-		ft_create_elem.c ft_putlist.c ft_list_size.c ft_strchr.c \
-		ft_create_list.c ft_struct_push_back.c ft_put_struct.c
+		ft_create_elem.c ft_putlist.c ft_list_size.c ft_strchr.c ft_realloc.c
 		
 CC = gcc
 CFLAGS ?= -Wall -Wextra -Werror -I includes/

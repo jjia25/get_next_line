@@ -12,9 +12,9 @@
 
 #include "libft.h"
 
-void ft_put_struct(t_mult_fd *mult_fd)
+void			ft_put_struct(t_mult_fd *mult_fd)
 {
-	t_mult_fd *tmp;
+	t_mult_fdcd	*tmp;
 
 	tmp = mult_fd;
 	while (tmp != NULL)

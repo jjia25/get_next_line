@@ -12,14 +12,14 @@
 
 #include "libft.h"
 
-void ft_putlist(t_list *list)
+void		ft_putlist(t_list *list)
 {
-	t_list *tmp;
+	t_list	*tmp;
 
 	tmp = list;
 	while (tmp)
 	{
-		ft_putchar(tmp->data);
+		ft_putstr(tmp->data);
 		tmp = tmp->next;
 	}
 }

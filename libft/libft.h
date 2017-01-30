@@ -19,17 +19,10 @@
 
 typedef struct			s_list
 {
-	char				data;
+	char				*data;
 	size_t				data_size;
 	struct s_list		*next;
 }						t_list;
-
-typedef struct				s_mult_fd
-{
-	int						fd;
-	t_list					*list;
-	struct s_mult_fd		*next;
-}							t_mult_fd;
 
 int						ft_isspace(char c);
 int						ft_digit_length(long n);
@@ -99,15 +92,13 @@ void					ft_lstdel(t_list **alst, void (*del)(void *, size_t));
 void					ft_lstadd(t_list **alst, t_list *new);
 void					ft_lstiter(t_list *lst, void (*f)(t_list *elem));
 t_list					*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem));
-void					ft_list_push_back(t_list **begin_list, char data);
+void					ft_list_push_back(t_list **begin_list, char *data);
 void					ft_list_push_front(t_list **begin_list, void *data);
 int						ft_list_size(t_list *begin_list);
-t_list					*ft_create_elem(char data);
+t_list					*ft_create_elem(char *data);
 char					*ft_strndup(char *s, size_t n);
 void					ft_putlist(t_list *list);
 int						ft_list_size(t_list *list);
-t_mult_fd				*ft_create_list(t_list *list, int fd);
-void					ft_struct_push_back(t_mult_fd **begin_struct, t_list **list, int fd);
-void					ft_put_struct(t_mult_fd *mult_fd);
+void					*ft_realloc(void **ptr, size_t old, size_t new_size);
 
 #endif

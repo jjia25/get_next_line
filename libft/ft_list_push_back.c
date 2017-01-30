@@ -12,7 +12,7 @@
 
 #include "libft.h"
 
-void	ft_list_push_back(t_list **begin_list, char data)
+void	ft_list_push_back(t_list **begin_list, char *data)
 {
 	t_list *temp_list;
 	t_list *new_node;
